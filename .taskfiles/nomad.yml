@@ -11,9 +11,15 @@ tasks:
     cmds:      
       - "nomad status"
     silent: true
-  jobs:
+  start-jobs:
     desc: nomad jobs 
     dir: "{{.NOMAD_DIR}}"
     cmds:      
       - "nomad run ./jobs/grafana.nomad"
     silent: true
+  stop-jobs:
+    desc: nomad jobs 
+    dir: "{{.NOMAD_DIR}}"
+    cmds:      
+      - "nomad job stop grafana"
+    silent: true    
