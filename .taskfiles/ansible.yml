@@ -32,16 +32,16 @@ tasks:
       - "ansible-playbook -i {{.ANSIBLE_HOSTS_FILE}} -u {{.SSH_USER}} {{.ANSIBLE_PLAYBOOK_DIR}}/{{.ANSIBLE_PLAYBOOK}}/cluster.yml -v -b"
     silent: true
 
-  restart:
-    desc: Restart hashistack services
+  stop:
+    desc: stop hashistack
     deps: [ping]
     cmds:
-      - "ansible-playbook -i {{.ANSIBLE_HOSTS_FILE}} -u {{.SSH_USER}} {{.ANSIBLE_PLAYBOOK_DIR}}/{{.ANSIBLE_PLAYBOOK}}/restart.yml -v -b"
+      - "ansible-playbook -i {{.ANSIBLE_HOSTS_FILE}} -u {{.SSH_USER}} {{.ANSIBLE_PLAYBOOK_DIR}}/{{.ANSIBLE_PLAYBOOK}}/stop.yml -v -b"
     silent: true
 
-  deploy:
-    desc: Deploy nomad jobs
+  start:
+    desc: start hashistack
     deps: [ping]
     cmds:
-      - "ansible-playbook -i {{.ANSIBLE_HOSTS_FILE}} -u {{.SSH_USER}} {{.ANSIBLE_PLAYBOOK_DIR}}/{{.ANSIBLE_PLAYBOOK}}/deploy.yml -v -b"
-    silent: true        
+      - "ansible-playbook -i {{.ANSIBLE_HOSTS_FILE}} -u {{.SSH_USER}} {{.ANSIBLE_PLAYBOOK_DIR}}/{{.ANSIBLE_PLAYBOOK}}/start.yml -v -b"
+    silent: true    

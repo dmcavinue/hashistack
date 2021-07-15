@@ -1,0 +1,47 @@
+---
+- hosts:
+    - vault_instances
+  become: true
+  gather_facts: true
+  any_errors_fatal: true
+  tasks:
+  - name: Stop vault
+    ansible.builtin.service:
+      name: vault
+      state: stopped
+
+- hosts:
+    - docker_instances
+  become: true
+  gather_facts: true
+  any_errors_fatal: true
+  tasks:
+  - name: Stop nomad
+    ansible.builtin.service:
+      name: nomad
+      state: stopped
+
+- hosts:
+    - consul_instances
+  become: true
+  gather_facts: true
+  any_errors_fatal: true
+  pre_tasks:
+    - name: Pausing for 5 seconds...
+      pause:
+        seconds: 5
+  tasks:
+  - name: Stop consul
+    ansible.builtin.service:
+      name: consul
+      state: stopped
+
+- hosts: traefik_instances
+  become: true
+  gather_facts: true
+  any_errors_fatal: true
+  tasks:
+  - name: Stop traefik
+    ansible.builtin.service:
+      name: traefik
+      state: stopped
