@@ -1,0 +1,2 @@
+traefik_bind_ip: "{{ ansible_eno1.ipv4.address }}"
+traefik_consul_master: "consul.service.{{ lookup('env', 'DOMAIN') }}"
