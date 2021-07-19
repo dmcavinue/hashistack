@@ -3,5 +3,5 @@ vault_datacenter: "{{ lookup('env', 'ENVIRONMENT') }}"
 vault_domain: "{{ lookup('env', 'DOMAIN') }}"
 vault_ui: yes
 vault_cluster_disable: yes
-vault_consul_token: "{{ lookup('env', 'CONSUL_ACL_TOKEN') }}"
-vault_service_registration_consul_token: "{{ lookup('env', 'CONSUL_ACL_TOKEN') }}"
+#vault_consul_token: "{{ lookup('env', 'CONSUL_ACL_TOKEN') }}"
+#vault_service_registration_consul_token: "{{ lookup('env', 'CONSUL_ACL_TOKEN') }}"
