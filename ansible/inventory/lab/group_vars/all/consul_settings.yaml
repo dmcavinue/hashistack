@@ -1,10 +1,11 @@
 ---
-#"{{ lookup('env', 'FOO') }}"
 consul_datacenter: "{{ lookup('env', 'ENVIRONMENT') }}"
 consul_acl_datacenter: "{{ lookup('env', 'ENVIRONMENT') }}"
 consul_domain: "{{ lookup('env', 'DOMAIN') }}"
 consul_recursors: ['1.1.1.1', '1.0.0.1']
 consul_client_address: "0.0.0.0"
 consul_dnsmasq_enable: yes
-consul_acl_master_token_display: yes
+consul_acl_policy: true
+consul_acl_enable: true
+consul_acl_default_policy: 'deny'
 vault_azurekeyvault: no
