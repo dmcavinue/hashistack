@@ -45,6 +45,7 @@ RUN apk --update --no-cache add \
     sshpass \
     sudo \
     unzip \
+    yaml-dev \
     yq \
     zsh
 
