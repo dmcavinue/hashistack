@@ -2,46 +2,54 @@
 version: '3'
 
 env:
-  ANSIBLE_CONFIG: "{{.PROJECT_DIR}}/ansible/ansible.cfg"    
-  
-vars:  
+  ANSIBLE_CONFIG: "{{.PROJECT_DIR}}/ansible/ansible.cfg"
+
+vars:
   ANSIBLE_PLAYBOOK_DIR: "{{.ANSIBLE_DIR}}/playbooks"
   ANSIBLE_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/inventory"
   ANSIBLE_PLAYBOOK: "hashistack"
-  ANSIBLE_HOSTS_FILE: "{{.ANSIBLE_INVENTORY_DIR}}/{{.ENVIRONMENT}}/hosts.yml"
+  ANSIBLE_HOSTS_FILE: "{{.ANSIBLE_INVENTORY_DIR}}/{{.ENVIRONMENT}}/hosts.ini"
   ANSIBLE_HOSTS:
-    sh: "[ ! -f {{.STATE_DIR}}/terraform.tfstate ] || jq -jr '.resources[] | select(((.module == \"module.hashistack\") and .type == \"null_resource\") and .name == \"node_info\") | .instances[] | .attributes.triggers.name + \",\" + .attributes.triggers.ipaddress + \" \"' {{.STATE_DIR}}/terraform.tfstate"
-    
+    sh: "[ ! -f {{.STATE_DIR}}/terraform.tfstate ] || jq '.resources[] | select((.name == \"ansible_inventory\") and .type == \"template_file\") | .instances[0].attributes.rendered' {{.STATE_DIR}}/terraform.tfstate"
+  SSH_PRIVATE_KEY:
+    sh: "[ ! -f {{.STATE_DIR}}/terraform.tfstate ] || jq '.resources[] | select(.type == \"tls_private_key\") | .instances[0].attributes.private_key_pem' {{.STATE_DIR}}/terraform.tfstate"
+  SSH_PUBLIC_KEY:
+    sh: "[ ! -f {{.STATE_DIR}}/terraform.tfstate ] || jq '.resources[] | select(.type == \"tls_private_key\") | .instances[0].attributes.public_key_openssh' {{.STATE_DIR}}/terraform.tfstate"
+  SSH_PRIVATE_KEY_PATH: "/home/${LOGNAME}/.ssh/id_rsa"
+  SSH_USER: "admin"
+  BOOTSTRAP_IP:
+    sh: "[ ! -f {{.STATE_DIR}}/terraform.tfstate ] || jq -r '.resources[] | select(.module == \"module.hashistack\") | .instances[0].attributes.private_ip' {{.STATE_DIR}}/terraform.tfstate"
+
 tasks:
+  export-inventory:
+    cmds:
+      - "[ -f {{.ANSIBLE_HOSTS_FILE}} ] || mkdir -p {{.ANSIBLE_INVENTORY_DIR}}/{{.ENVIRONMENT}} && echo -e {{.ANSIBLE_HOSTS}} > {{.ANSIBLE_HOSTS_FILE}}"
+    silent: true
   export-sshkey:
     cmds:
-      - "[ -f ~/.ssh/id_rsa ] || mkdir ~/.ssh && echo -e {{.SSH_PRIVATE_KEY}} > ~/.ssh/id_rsa && chmod 0600 ~/.ssh/id_rsa"
+      - "[ -f {{.SSH_PRIVATE_KEY_PATH}} ] || mkdir -p /home/${LOGNAME}/.ssh && echo -e {{.SSH_PRIVATE_KEY}} > {{.SSH_PRIVATE_KEY_PATH}} && chmod 0600 {{.SSH_PRIVATE_KEY_PATH}}"
     silent: true
-
   ping:
     desc: Ping all nodes
-    deps: [export-sshkey]
+    deps: [export-sshkey, export-inventory]
     cmds:
       - "ansible all -i {{.ANSIBLE_HOSTS_FILE}} -u {{.SSH_USER}} --one-line -m ping"
     silent: true
-
   install:
     desc: Install hashistack
     deps: [ping]
     cmds:
-      - "ansible-playbook -i {{.ANSIBLE_HOSTS_FILE}} -u {{.SSH_USER}} {{.ANSIBLE_PLAYBOOK_DIR}}/{{.ANSIBLE_PLAYBOOK}}/cluster.yml -v -b"
+      - "ansible-playbook -i {{.ANSIBLE_HOSTS_FILE}} -u {{.SSH_USER}} --become {{.ANSIBLE_PLAYBOOK_DIR}}/{{.ANSIBLE_PLAYBOOK}}/cluster.yml -v -b"
     silent: true
-
   stop:
     desc: stop hashistack
     deps: [ping]
     cmds:
       - "ansible-playbook -i {{.ANSIBLE_HOSTS_FILE}} -u {{.SSH_USER}} {{.ANSIBLE_PLAYBOOK_DIR}}/{{.ANSIBLE_PLAYBOOK}}/stop.yml -v -b"
     silent: true
-
   start:
     desc: start hashistack
     deps: [ping]
     cmds:
       - "ansible-playbook -i {{.ANSIBLE_HOSTS_FILE}} -u {{.SSH_USER}} {{.ANSIBLE_PLAYBOOK_DIR}}/{{.ANSIBLE_PLAYBOOK}}/start.yml -v -b"
-    silent: true    
+    silent: true

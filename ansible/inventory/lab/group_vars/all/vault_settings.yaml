@@ -1,5 +1,5 @@
-#vault_iface: eno1
+---
 vault_datacenter: "{{ lookup('env', 'ENVIRONMENT') }}"
-vault_domain: "{{ lookup('env', 'DOMAIN') }}"
 vault_ui: yes
-vault_cluster_disable: yes
+vault_backend: consul
+vault_consul_token: "{{ lookup('env', 'CONSUL_ACL_AGENT_MASTER_TOKEN') }}"

@@ -1,20 +1,17 @@
+---
 version: "3.4"
 services:
-  hashistack:
-    environment:
-      HISTFILE: /bash_history/.bash_history
-    image: builder:latest
+  devcontainer:
+    image: hashistack-devcontainer:latest
     network_mode: host
     build:
-      context: ./docker/hashistack
-    working_dir: /app
+      context: .devcontainer
+    working_dir: /home/vscode/workspace
+    command: "/bin/sh -c \"while sleep 1000; do :; done\""
+    user: vscode
     volumes:
-      - .:/app:rw
-      - bashhistory:/bash_history
-      - ~/.gnupg:/root/.gnupg
+      - ".:/home/vscode/workspace"
+      - "~/.gnupg:/home/vscode/.gnupg"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
-
-volumes:
-  # useful to maintain history
-  bashhistory:
+      - "~/.gitconfig:/home/vscode/.gitconfig:z"

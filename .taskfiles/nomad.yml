@@ -2,24 +2,24 @@
 version: '3'
 var:
   NOMAD_JOBS_DIR: "{{.NOMAD_DIR}}/jobs"
-env:  
-  NOMAD_ADDR: "http://nomad-servers.service.{{.DOMAIN}}:4646"
-  NOMAD_SKIP_VERIFY: "true"  
+env:
+  NOMAD_ADDR: "http://{{.BOOTSTRAP_IP}}:4646"
+  NOMAD_SKIP_VERIFY: "true"
 tasks:
   status:
     desc: nomad status
-    cmds:      
+    cmds:
       - "nomad status"
     silent: true
   start-jobs:
-    desc: nomad jobs 
+    desc: nomad jobs
     dir: "{{.NOMAD_DIR}}"
-    cmds:      
+    cmds:
       - "nomad run ./jobs/grafana.nomad"
     silent: true
   stop-jobs:
-    desc: nomad jobs 
+    desc: nomad jobs
     dir: "{{.NOMAD_DIR}}"
-    cmds:      
+    cmds:
       - "nomad job stop grafana"
-    silent: true    
+    silent: true
