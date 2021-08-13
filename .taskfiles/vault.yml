@@ -5,6 +5,8 @@ env:
   VAULT_SECRETS: "./vault_secrets.json"
   VAULT_SKIP_VERIFY: "true"
   VAULT_ADDR: "http://{{.BOOTSTRAP_IP}}:8200"
+  VAULT_TOKEN:
+    sh: "[ ! -f {{.VAULT_SECRETS}} ] || cat {{.VAULT_SECRETS}} | jq -r '.root_token'"
 tasks:
   init:
     desc: Initialize vault

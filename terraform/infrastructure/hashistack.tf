@@ -19,7 +19,7 @@ module "hashistack" {
   name                   = "hashistack"
   instance_type          = "t2.micro"
   instance_count         = local.consul_instance_count
-  ami                    = data.aws_ami.image.id
+  ami                    = data.aws_ami.debian.id
   subnet_id              = module.vpc.private_subnets.0
   key_name               = module.key_pair.key_pair_key_name
   vpc_security_group_ids = [module.vpc.default_security_group_id]

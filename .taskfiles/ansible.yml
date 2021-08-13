@@ -8,7 +8,7 @@ vars:
   ANSIBLE_PLAYBOOK_DIR: "{{.ANSIBLE_DIR}}/playbooks"
   ANSIBLE_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/inventory"
   ANSIBLE_PLAYBOOK: "hashistack"
-  ANSIBLE_HOSTS_FILE: "{{.ANSIBLE_INVENTORY_DIR}}/{{.ENVIRONMENT}}/hosts.yml"
+  ANSIBLE_HOSTS_FILE: "{{.ANSIBLE_INVENTORY_DIR}}/{{.ENVIRONMENT}}/hosts.ini"
   ANSIBLE_HOSTS:
     sh: "[ ! -f {{.STATE_DIR}}/terraform.tfstate ] || jq '.resources[] | select((.name == \"ansible_inventory\") and .type == \"template_file\") | .instances[0].attributes.rendered' {{.STATE_DIR}}/terraform.tfstate"
   SSH_PRIVATE_KEY:
@@ -16,7 +16,7 @@ vars:
   SSH_PUBLIC_KEY:
     sh: "[ ! -f {{.STATE_DIR}}/terraform.tfstate ] || jq '.resources[] | select(.type == \"tls_private_key\") | .instances[0].attributes.public_key_openssh' {{.STATE_DIR}}/terraform.tfstate"
   SSH_PRIVATE_KEY_PATH: "/home/${LOGNAME}/.ssh/id_rsa"
-  SSH_USER: "ubuntu"
+  SSH_USER: "admin"
   BOOTSTRAP_IP:
     sh: "[ ! -f {{.STATE_DIR}}/terraform.tfstate ] || jq -r '.resources[] | select(.module == \"module.hashistack\") | .instances[0].attributes.private_ip' {{.STATE_DIR}}/terraform.tfstate"
 

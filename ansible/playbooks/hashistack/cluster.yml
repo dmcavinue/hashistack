@@ -4,10 +4,6 @@
   become: true
   gather_facts: true
   any_errors_fatal: true
-  pre_tasks:
-    - name: Pausing for 5 seconds...
-      pause:
-        seconds: 5
   roles:
     - brianshumate.consul
 
@@ -16,25 +12,17 @@
   become: true
   gather_facts: true
   any_errors_fatal: true
-  pre_tasks:
-    - name: Pausing for 5 seconds...
-      pause:
-        seconds: 5
   roles:
     - brianshumate.vault
 
-# - hosts:
-#     - docker_instances
-#   become: true
-#   gather_facts: true
-#   any_errors_fatal: true
-#   pre_tasks:
-#     - name: Pausing for 5 seconds...
-#       pause:
-#         seconds: 5
-#   roles:
-#     - geerlingguy.docker
-#     - brianshumate.nomad
+- hosts:
+    - docker_instances
+  become: true
+  gather_facts: true
+  any_errors_fatal: true
+  roles:
+    - geerlingguy.docker
+    - brianshumate.nomad
 
 # - hosts: traefik_instances
 #   become: true

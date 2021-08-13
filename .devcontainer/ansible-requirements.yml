@@ -1,11 +1,14 @@
 ---
 roles:
   - name: brianshumate.consul
+    src: https://github.com/ansible-community/ansible-consul
     version: 'v2.5.4'
   - name: brianshumate.nomad
-    version: 'v1.9.5'
+    src: https://github.com/ansible-community/ansible-nomad
+    version: 'v1.9.6'
   - name: brianshumate.vault
-    version: 'v2.5.2'
+    src: https://github.com/ansible-community/ansible-vault
+    version: 'v2.5.8'
   - name: geerlingguy.docker
     version: '4.0.0'
   - name: kibatic.traefik

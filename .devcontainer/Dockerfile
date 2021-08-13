@@ -3,10 +3,10 @@ FROM alpine:3.14
 # default binary versions
 ARG TASK_VERSION=3.6.0
 ARG CONSUL_VERSION=1.10.0
-ARG NOMAD_VERSION=1.1.1-r0
+ARG NOMAD_VERSION=1.1.1
 ARG PACKER_VERSION=1.7.4
 ARG TERRAFORM_VERSION=0.15.5
-ARG VAULT_VERSION=1.3.2
+ARG VAULT_VERSION=1.8.1
 
 ENV DEBIAN_FRONTEND=noninteractive \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
@@ -82,7 +82,7 @@ RUN \
     chmod +x /usr/bin/vault && \
     rm -rf vault_${VAULT_VERSION}_linux_amd64.zip && \
     # nomad
-    apk --update --no-cache add nomad="${NOMAD_VERSION}" \
+    apk --update --no-cache add nomad="${NOMAD_VERSION}-r0" \
         --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 HEALTHCHECK NONE
