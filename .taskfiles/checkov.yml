@@ -1,0 +1,26 @@
+---
+version: '3'
+
+tasks:
+  all:
+    desc: Run all checks
+    dir: "{{.PROJECT_DIR}}"
+    cmds:
+      - task checkov:docker
+      - task checkov:kubernetes
+      - task checkov:terraform
+  docker:
+    desc: Scan docker Iac Code
+    dir: "{{.PROJECT_DIR}}"
+    cmds:
+      - checkov --compact --directory ./.devcontainer
+  kubernetes:
+    desc: Scan k8s Iac Code
+    dir: "{{.PROJECT_DIR}}"
+    cmds:
+      - checkov --compact --directory ./cluster --skip-check flux-system
+  terraform:
+    desc: Scan terraform Iac Code
+    dir: "{{.PROJECT_DIR}}"
+    cmds:
+      - checkov --compact --directory ./terraform

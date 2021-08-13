@@ -5,27 +5,15 @@ vars:
   PROJECT_DIR:
     sh: "git rev-parse --show-toplevel"
   ANSIBLE_DIR: "{{.PROJECT_DIR}}/ansible"
-  CLUSTER_DIR: "{{.PROJECT_DIR}}/cluster"
-  TERRAFORM_DIR: "{{.PROJECT_DIR}}/terraform/cluster"
+  TERRAFORM_DIR: "{{.PROJECT_DIR}}/terraform/infrastructure"
   NOMAD_DIR: "{{.PROJECT_DIR}}/nomad"
   STATE_DIR: "{{.TERRAFORM_DIR}}/terraform.tfstate.d/{{.ENVIRONMENT}}"
-  # the terraform state used to build instances contains some useful things
-  SSH_USER:
-    sh: "[ ! -f {{.STATE_DIR}}/terraform.tfstate ] || jq -r '.resources[] | select(((.module == \"module.hashistack\") and .type == \"null_resource\") and .name == \"node_info\") | .instances[0].attributes.triggers.username' {{.STATE_DIR}}/terraform.tfstate"
-  SSH_PRIVATE_KEY:
-    sh: "[ ! -f {{.STATE_DIR}}/terraform.tfstate ] || jq '.resources[] | select((.module == \"module.hashistack\") and .type == \"tls_private_key\") | .instances[0].attributes.private_key_pem' {{.STATE_DIR}}/terraform.tfstate"
-  SSH_PUBLIC_KEY:
-    sh: "[ ! -f {{.STATE_DIR}}/terraform.tfstate ] || jq '.resources[] | select((.module == \"module.hashistack\") and .type == \"tls_private_key\") | .instances[0].attributes.public_key_openssh' {{.STATE_DIR}}/terraform.tfstate"
-  MASTER_IP:
-    sh: "[ ! -f {{.STATE_DIR}}/terraform.tfstate ] || jq -r '.resources[] | select(((.module == \"module.hashistack\") and .type == \"null_resource\") and .name == \"node_info\") | .instances[0].attributes.triggers.ipaddress' {{.STATE_DIR}}/terraform.tfstate"
-env:
-  VAULT_TOKEN:
-    sh: cat {{.VAULT_SECRETS}} | jq -r '.root_token'
 
 dotenv: [".env"]
-  
+
 includes:
   ansible: .taskfiles/ansible.yml
+  checkov: .taskfiles/checkov.yml
+  nomad: .taskfiles/nomad.yml
   terraform: .taskfiles/terraform.yml
   vault: .taskfiles/vault.yml
-  nomad: .taskfiles/nomad.yml

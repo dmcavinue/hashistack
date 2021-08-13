@@ -1,5 +1,0 @@
----
-creation_rules:
-- encrypted_regex: '^(data|stringData)$'
-  pgp: >-
-    ${PERSONAL_KEY_FP}

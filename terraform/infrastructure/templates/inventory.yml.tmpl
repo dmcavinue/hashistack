@@ -1,0 +1,27 @@
+%{ for i,h in split(",", hosts) ~}
+${h} ansible_host=${split(",", ips)[i]} ip=${split(",", ips)[i]} access_ip=${split(",", ips)[i]}
+%{ endfor ~}
+
+[consul_instances]
+${split(",", hosts)[0]} consul_node_role=bootstrap
+%{ for i,h in split(",", hosts) ~}
+%{ if i > 0 ~}${h} consul_node_role=client%{ endif ~}
+%{ endfor ~}
+
+[vault_instances]
+${split(",", hosts)[0]}
+
+[docker_instances]
+${split(",", hosts)[0]} nomad_node_role=both
+%{ for i,h in split(",", hosts) ~}
+%{ if i > 0 ~}${h} nomad_node_role=client%{ endif ~}
+%{ endfor ~}
+
+[traefik_instances]
+${split(",", hosts)[0]}
+
+[nomad_deployer]
+${split(",", hosts)[0]}
+
+[nomad_instances]
+${split(",", hosts)[0]}
