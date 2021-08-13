@@ -16,7 +16,7 @@
     - brianshumate.vault
 
 - hosts:
-    - docker_instances
+    - nomad_instances
   become: true
   gather_facts: true
   any_errors_fatal: true
@@ -24,20 +24,20 @@
     - geerlingguy.docker
     - brianshumate.nomad
 
-# - hosts: traefik_instances
-#   become: true
-#   gather_facts: true
-#   any_errors_fatal: true
-#   post_tasks:
-#     - name: Copy Traefik Config File
-#       template:
-#         src: templates/traefik.toml.j2
-#         dest: /etc/traefik.toml
-#   roles:
-#     - kibatic.traefik
-#   tasks:
-#     - name: Restart traefik
-#       service:
-#         name: traefik
-#         state: restarted
-#         enabled: yes
+- hosts: traefik_instances
+  become: true
+  gather_facts: true
+  any_errors_fatal: true
+  post_tasks:
+    - name: Copy Traefik Config File
+      template:
+        src: templates/traefik.toml.j2
+        dest: /etc/traefik.toml
+  roles:
+    - kibatic.traefik
+  tasks:
+    - name: Restart traefik
+      service:
+        name: traefik
+        state: restarted
+        enabled: yes

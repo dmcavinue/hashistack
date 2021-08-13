@@ -49,8 +49,8 @@ job "grafana" {
       service {
         name = "grafana"
         tags = [
-          "traefik.enable=true",          
-          "traefik.http.routers.grafana.rule=Host(`grafana.lab.nucstack.com`)"
+          "traefik.enable=true",
+          "traefik.http.routers.grafana.rule=Host(`grafana.lab.example.com`)"
         ]
         port = "http"
 

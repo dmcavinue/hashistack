@@ -8,20 +8,13 @@ ${split(",", hosts)[0]} consul_node_role=bootstrap
 %{ if i > 0 ~}${h} consul_node_role=client\n%{ endif ~}
 %{ endfor ~}
 
-[docker_instances]
-${split(",", hosts)[0]} nomad_node_role=both
+[nomad_instances]
 %{ for i,h in split(",", hosts) ~}
-%{ if i > 0 ~}${h} nomad_node_role=client\n%{ endif ~}
+${h} nomad_node_role=both
 %{ endfor ~}
 
 [vault_instances]
 ${split(",", hosts)[0]}
 
 [traefik_instances]
-${split(",", hosts)[0]}
-
-[nomad_deployer]
-${split(",", hosts)[0]}
-
-[nomad_instances]
 ${split(",", hosts)[0]}

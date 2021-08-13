@@ -3,7 +3,7 @@ version: '3'
 var:
   NOMAD_JOBS_DIR: "{{.NOMAD_DIR}}/jobs"
 env:
-  NOMAD_ADDR: "http://{{.BOOTSTRAP_IP}}}:4646"
+  NOMAD_ADDR: "http://{{.BOOTSTRAP_IP}}:4646"
   NOMAD_SKIP_VERIFY: "true"
 tasks:
   status:

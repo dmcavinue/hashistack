@@ -1,2 +1,3 @@
 ---
 traefik_consul_master: "consul.service.{{ lookup('env', 'DOMAIN') }}"
+traefik_bind_ip: "0.0.0.0"
