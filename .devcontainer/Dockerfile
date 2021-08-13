@@ -12,10 +12,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
     EDITOR=nano \
     LANG=en_US.UTF-8 \
-    LC_ALL=en_US.UTF-8 \
-    CONSUL_HTTP_ADDR=127.0.0.1:8500 \
-    VAULT_ADDR=http://127.0.0.1:8200 \
-    NOMAD_ADDR=http://127.0.0.1:4646
+    LC_ALL=en_US.UTF-8
 
 # install persisted devcontainer dependencies
 RUN apk --update --no-cache add \

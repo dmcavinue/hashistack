@@ -1,9 +1,15 @@
 ---
 roles:
-  - name: xanmanning.k3s
-    version: 'v2.9.1'
-  - name: accelize.linux_kernel
-    version: '1.2.4'
+  - name: brianshumate.consul
+    version: 'v2.5.4'
+  - name: brianshumate.nomad
+    version: 'v1.9.5'
+  - name: brianshumate.vault
+    version: 'v2.5.2'
+  - name: geerlingguy.docker
+    version: '4.0.0'
+  - name: kibatic.traefik
+    version: '1.7.20'
 collections:
   - name: community.general
     version: '3.1.0'
