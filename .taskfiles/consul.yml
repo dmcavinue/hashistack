@@ -1,0 +1,11 @@
+---
+version: '3'
+env:
+  CONSUL_HTTP_ADDR: "http://{{.BOOTSTRAP_IP}}:8500"
+  CONSUL_SKIP_VERIFY: "true"
+tasks:
+  status:
+    desc: consul kv
+    cmds:
+      - "consul kv get k8s"
+    silent: true

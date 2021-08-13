@@ -14,6 +14,7 @@ dotenv: [".env"]
 includes:
   ansible: .taskfiles/ansible.yml
   checkov: .taskfiles/checkov.yml
+  consul: .taskfiles/consul.yml
   nomad: .taskfiles/nomad.yml
   terraform: .taskfiles/terraform.yml
   vault: .taskfiles/vault.yml

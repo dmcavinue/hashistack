@@ -6,7 +6,7 @@ ARG CONSUL_VERSION=1.10.0
 ARG NOMAD_VERSION=1.1.1-r0
 ARG PACKER_VERSION=1.7.4
 ARG TERRAFORM_VERSION=0.15.5
-ARG VAULT_VERSION=1.8.1
+ARG VAULT_VERSION=1.3.2
 
 ENV DEBIAN_FRONTEND=noninteractive \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
@@ -14,9 +14,14 @@ ENV DEBIAN_FRONTEND=noninteractive \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
+ENV VAULT_VERSION="${VAULT_VERSION}"
+ENV CONSUL_VERSION="${CONSUL_VERSION}"
+ENV NOMAD_VERSION="${NOMAD_VERSION}"
+
 # install persisted devcontainer dependencies
 RUN apk --update --no-cache add \
     apache2-utils \
+    bash \
     build-base \
     ca-certificates \
     curl \
@@ -42,11 +47,6 @@ RUN apk --update --no-cache add \
     unzip \
     yq \
     zsh
-
-# install pip/ansible dependencies
-COPY pip-requirements.txt ansible-requirements.yml /tmp/
-RUN pip3 install --requirement /tmp/pip-requirements.txt
-RUN ansible-galaxy install -r /tmp/ansible-requirements.yml
 
 # install required binaries
 RUN \
@@ -104,13 +104,17 @@ COPY --chown=${USERNAME} .zshrc /home/${USERNAME}
 RUN git clone --single-branch --depth 1 https://github.com/robbyrussell/oh-my-zsh.git /home/${USERNAME}/.oh-my-zsh &> /dev/null && \
     rm -rf /home/${USERNAME}/.oh-my-zsh/.git && \
     chown -R ${USERNAME}:${USER_GID} /home/${USERNAME}/.oh-my-zsh && \
-    chmod -R 700 /home/${USERNAME}/.oh-my-zsh && \
-    cp -R /root/.ansible /home/${USERNAME} && chown -R ${USERNAME}:${USER_GID} /home/${USERNAME}/.ansible
+    chmod -R 700 /home/${USERNAME}/.oh-my-zsh
 
 # cleanup
 RUN rm -rf /var/cache/apk/*
 
 WORKDIR /home/${USERNAME}
 USER ${USERNAME}
+
+# install pip/ansible dependencies
+COPY pip-requirements.txt ansible-requirements.yml /tmp/
+RUN pip3 install --requirement /tmp/pip-requirements.txt
+RUN .local/bin/ansible-galaxy install -r /tmp/ansible-requirements.yml
 
 CMD ["/bin/zsh"]
