@@ -3,9 +3,15 @@ version: '3'
 env:
   CONSUL_HTTP_ADDR: "http://{{.BOOTSTRAP_IP}}:8500"
   CONSUL_SKIP_VERIFY: "true"
+  CONSUL_HTTP_TOKEN: "{{.CONSUL_ACL_TOKEN}}"
 tasks:
-  status:
-    desc: consul kv
+  acl_bootstrap:
+    desc: acl bootstrap
     cmds:
-      - "consul kv get k8s"
+      - "consul acl bootstrap"
+    silent: true
+  acl_list_tokens:
+    desc: acl token list
+    cmds:
+      - "consul acl token list"
     silent: true

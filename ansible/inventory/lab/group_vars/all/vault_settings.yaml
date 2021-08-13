@@ -2,3 +2,4 @@
 vault_datacenter: "{{ lookup('env', 'ENVIRONMENT') }}"
 vault_ui: yes
 vault_backend: consul
+vault_consul_token: "{{ lookup('env', 'CONSUL_ACL_AGENT_MASTER_TOKEN') }}"

@@ -14,10 +14,6 @@ ENV DEBIAN_FRONTEND=noninteractive \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
-ENV VAULT_VERSION="${VAULT_VERSION}"
-ENV CONSUL_VERSION="${CONSUL_VERSION}"
-ENV NOMAD_VERSION="${NOMAD_VERSION}"
-
 # install persisted devcontainer dependencies
 RUN apk --update --no-cache add \
     apache2-utils \

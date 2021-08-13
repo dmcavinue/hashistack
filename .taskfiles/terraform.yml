@@ -23,8 +23,13 @@ tasks:
     dir: "{{.TERRAFORM_DIR}}"
     cmds:
       - terraform apply
-  destroy:
+  destroy-all:
     desc: destroy terraform
     dir: "{{.TERRAFORM_DIR}}"
     cmds:
       - terraform destroy
+  destroy-hashistack:
+    desc: recreate hashistack
+    dir: "{{.TERRAFORM_DIR}}"
+    cmds:
+      - terraform apply -destroy --target=module.hashistack.aws_instance.this
