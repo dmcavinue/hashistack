@@ -3,16 +3,16 @@ version: '3'
 
 env:
   VAULT_SECRETS: "./vault_secrets.json"
-  VAULT_SKIP_VERIFY: "true"  
-  VAULT_ADDR: "http://{{.MASTER_IP}}:8200"
+  VAULT_SKIP_VERIFY: "true"
+  VAULT_ADDR: "http://{{.BOOTSTRAP_IP}}:8200"
 tasks:
   init:
     desc: Initialize vault
-    cmds:      
+    cmds:
       - "vault operator init -key-shares=5 -key-threshold=3 -format json > ${VAULT_SECRETS}"
     silent: true
   unseal:
     desc: Unseal vault
-    cmds:      
+    cmds:
       - cat {{.VAULT_SECRETS}} | jq -r '.unseal_keys_b64|.[]' | xargs -n 1 -I '{}' vault operator unseal {}
     silent: true
